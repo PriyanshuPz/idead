@@ -2,7 +2,8 @@
 {% block title %}Idea {{ idea.id }} | Idead{% endblock %}
 
 {% block content %}
-<div class="panel">
+{% set diff = difficulty_meta(idea.difficulty) %}
+<div class="panel {{ diff.css_class }}">
     <div class="panel-header">
         <div class="row-space">
             <h2 class="panel-title title-main">{{ idea.title }}</h2>
@@ -13,7 +14,7 @@
     <div class="meta-row">
         <p class="text-muted mono meta-small">
             LOGGED: {{ idea.created_at.strftime('%Y-%m-%d %H:%M:%S') }} //
-            DIFFICULTY: {{ idea.difficulty }}/5
+            DIFFICULTY: <span class="difficulty-badge {{ diff.css_class }}">{{ diff.label }}</span>
         </p>
         {% if idea.project_url %}
         <p class="text-muted mono meta-small">

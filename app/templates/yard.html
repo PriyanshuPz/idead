@@ -19,7 +19,8 @@
 
 <div class="grid-2">
     {% for idea in ideas %}
-    <a href="{{ url_for('ideas.view_idea', id=idea.id) }}" class="panel card-link">
+    {% set diff = difficulty_meta(idea.difficulty) %}
+    <a href="{{ url_for('ideas.view_idea', id=idea.id) }}" class="panel card-link {{ diff.css_class }}">
         <div class="row-space card-head">
             <h3 class="title-main card-title">{{ idea.title }}</h3>
             <span class="mono text-muted card-id">ID: [{{ '%04d' % idea.id }}]</span>
@@ -30,7 +31,7 @@
         </p>
 
         <div class="mono text-muted card-meta">
-            <span>DIFF: {{ idea.difficulty }}/5</span>
+            <span>DIFF: <span class="difficulty-badge {{ diff.css_class }}">{{ diff.label }}</span></span>
             <span>V:{{ idea.views }} U:{{ idea.upvotes }}</span>
         </div>
     </a>

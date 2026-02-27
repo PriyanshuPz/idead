@@ -179,6 +179,26 @@ p {
   background-color: var(--bg-panel-hover);
 }
 
+.difficulty-1 {
+  border-left: 2px solid #536f5d;
+}
+
+.difficulty-2 {
+  border-left: 2px solid #688462;
+}
+
+.difficulty-3 {
+  border-left: 2px solid #7f8365;
+}
+
+.difficulty-4 {
+  border-left: 2px solid #90795d;
+}
+
+.difficulty-5 {
+  border-left: 2px solid #9b6653;
+}
+
 .panel-narrow {
   max-width: 680px;
   margin-left: auto;
@@ -244,6 +264,64 @@ p {
 
 .form-group {
   margin-bottom: var(--grid-spacing);
+}
+
+.difficulty-group {
+  border: 1px solid var(--border-dim);
+  padding: 0.7rem;
+}
+
+.difficulty-group legend {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  padding: 0 0.35rem;
+}
+
+.difficulty-selector {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.5rem;
+}
+
+.difficulty-choice input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.difficulty-chip {
+  display: block;
+  border: 1px solid var(--border-dim);
+  padding: 0.45rem 0.6rem;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.difficulty-chip-label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  margin-bottom: 0.15rem;
+}
+
+.difficulty-chip-hint {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.difficulty-choice input[type="radio"]:focus-visible+.difficulty-chip {
+  border-color: var(--accent-amber);
+  outline: 1px solid var(--accent-amber);
+  outline-offset: 1px;
+}
+
+.difficulty-choice input[type="radio"]:checked+.difficulty-chip {
+  background-color: rgba(200, 156, 75, 0.08);
+  border-color: var(--border-focus);
 }
 
 label {
@@ -475,6 +553,34 @@ textarea {
   justify-content: space-between;
   border-top: 1px solid var(--border-dim);
   padding-top: 0.45rem;
+}
+
+.difficulty-badge {
+  border: 1px solid var(--border-dim);
+  padding: 0.05rem 0.35rem;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.difficulty-badge.difficulty-1 {
+  border-color: #536f5d;
+}
+
+.difficulty-badge.difficulty-2 {
+  border-color: #688462;
+}
+
+.difficulty-badge.difficulty-3 {
+  border-color: #7f8365;
+}
+
+.difficulty-badge.difficulty-4 {
+  border-color: #90795d;
+}
+
+.difficulty-badge.difficulty-5 {
+  border-color: #9b6653;
 }
 
 .empty-panel {

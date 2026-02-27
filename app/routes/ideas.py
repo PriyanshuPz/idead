@@ -1,4 +1,12 @@
-from flask import current_app, flash, jsonify, redirect, render_template, request, url_for
+from flask import (
+    current_app,
+    flash,
+    jsonify,
+    redirect,
+    render_template,
+    request,
+    url_for,
+)
 
 from app.models import Idea, db
 from app.routes import ideas_bp
@@ -119,10 +127,11 @@ def report(id):
     idea.reports += 1
     db.session.commit()
 
-    # Check if report threshold is reached
     deleted = check_and_moderate(idea)
 
     if deleted:
-        return jsonify({"success": True, "deleted": True, "message": "Idea has been buried."})
+        return jsonify(
+            {"success": True, "deleted": True, "message": "Idea has been buried."}
+        )
 
     return jsonify({"success": True, "deleted": False})

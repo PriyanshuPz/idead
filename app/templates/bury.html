@@ -35,10 +35,21 @@
             <p class="text-muted mono field-note">Link to repository, prototype, or related documentation.</p>
         </div>
 
-        <div class="form-group">
-            <label for="difficulty">Perceived Difficulty (1-5)</label>
-            <input type="number" id="difficulty" name="difficulty" min="1" max="5" required value="3">
-        </div>
+        <fieldset class="form-group difficulty-group">
+            <legend>Perceived Difficulty (System Classification)</legend>
+            <div class="difficulty-selector" role="radiogroup" aria-label="Perceived difficulty">
+                {% for option in difficulty_options %}
+                <div class="difficulty-choice">
+                    <input type="radio" id="difficulty-{{ option.value }}" name="difficulty" value="{{ option.value }}"
+                        {% if option.value == 3 %}checked{% endif %} required>
+                    <label for="difficulty-{{ option.value }}" class="difficulty-chip {{ option.css_class }}">
+                        <span class="difficulty-chip-label">{{ option.label }}</span>
+                        <span class="difficulty-chip-hint">{{ option.hint }}</span>
+                    </label>
+                </div>
+                {% endfor %}
+            </div>
+        </fieldset>
 
         {% if captcha_enabled %}
         <div class="form-group">

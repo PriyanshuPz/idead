@@ -21,3 +21,6 @@
 - [x] setup deployment config
 - [x] added option to set any resource URL in the idea for other people to see
 - [x] Added an identifier to check unique views
+- [x] updated diff UI and the presentation
+- [x] added error pages like 404
+

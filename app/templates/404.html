@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}404 | Idead{% endblock %}
+
+{% block content %}
+<div class="panel panel-narrow">
+    <div class="panel-header">
+        <h2 class="panel-title">Record Not Found</h2>
+        <span class="panel-meta">ERR.404</span>
+    </div>
+    <p class="text-muted">
+        The requested resource does not exist in this sector.
+    </p>
+    <div class="panel-actions">
+        <a class="btn" href="{{ url_for('main.index') }}">Return to Terminal</a>
+    </div>
+</div>
+{% endblock %}

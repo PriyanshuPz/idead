@@ -31,14 +31,16 @@
 </div>
 
 <div class="grid-2">
-    <div class="panel">
+    <div class="panel {% if trending %}{{ difficulty_meta(trending.difficulty).css_class }}{% endif %}">
         <div class="panel-header">
             <h3 class="panel-title">Trending Sector</h3>
             <span class="panel-meta">ACTIVE_NODE</span>
         </div>
         {% if trending %}
+        {% set trending_diff = difficulty_meta(trending.difficulty) %}
         <h4 class="text-accent">{{ trending.title }}</h4>
         <p class="text-muted mono">Upvotes: [{{ trending.upvotes }}] // Views: [{{ trending.views }}]</p>
+        <p class="text-muted mono">Class: <span class="difficulty-badge {{ trending_diff.css_class }}">{{ trending_diff.label }}</span></p>
         <p>{{ trending.description[:140] }}{% if trending.description|length > 140 %}...{% endif %}</p>
         <div class="panel-actions">
             <a href="{{ url_for('ideas.view_idea', id=trending.id) }}" class="btn btn-sm">Inspect</a>
@@ -48,14 +50,15 @@
         {% endif %}
     </div>
 
-    <div class="panel">
+    <div class="panel {% if random %}{{ difficulty_meta(random.difficulty).css_class }}{% endif %}">
         <div class="panel-header">
             <h3 class="panel-title">Random Selection</h3>
             <span class="panel-meta">RND_ACCESS</span>
         </div>
         {% if random %}
+        {% set random_diff = difficulty_meta(random.difficulty) %}
         <h4 class="text-accent">{{ random.title }}</h4>
-        <p class="text-muted mono">Difficulty: {{ random.difficulty }}/5</p>
+        <p class="text-muted mono">Class: <span class="difficulty-badge {{ random_diff.css_class }}">{{ random_diff.label }}</span></p>
         <p>{{ random.description[:140] }}{% if random.description|length > 140 %}...{% endif %}</p>
         <div class="panel-actions">
             <a href="{{ url_for('ideas.view_idea', id=random.id) }}" class="btn btn-sm">Inspect</a>

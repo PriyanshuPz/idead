@@ -11,7 +11,7 @@ def index():
     prune_flagged_ideas()
     stats = get_stats()
     trending_idea = get_trending_idea()
-    random_idea = get_random_idea()
+    random_idea = get_random_idea(exclude_id=trending_idea.id if trending_idea else None)
     return render_template(
         "index.html", stats=stats, trending=trending_idea, random=random_idea
     )
