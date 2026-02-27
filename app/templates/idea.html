@@ -15,6 +15,12 @@
             LOGGED: {{ idea.created_at.strftime('%Y-%m-%d %H:%M:%S') }} //
             DIFFICULTY: {{ idea.difficulty }}/5
         </p>
+        {% if idea.project_url %}
+        <p class="text-muted mono meta-small">
+            REFERENCE:
+            <a class="external-ref" href="{{ idea.project_url }}" target="_blank" rel="noopener noreferrer">{{ idea.project_url }}</a>
+        </p>
+        {% endif %}
     </div>
 
     <div class="section-block">
@@ -29,7 +35,7 @@
 
     <div class="action-bar">
         <div class="mono text-muted meta-actions">
-            VIEWS: [{{ idea.views }}] // UPVOTES: [<span id="upvote-count">{{ idea.upvotes }}</span>] // REPORTS: [<span id="report-count">{{ idea.reports }}</span>]
+            VIEWS: [<span id="view-count">{{ idea.views }}</span>] // UPVOTES: [<span id="upvote-count">{{ idea.upvotes }}</span>] // REPORTS: [<span id="report-count">{{ idea.reports }}</span>]
         </div>
 
         <div class="action-buttons">
@@ -46,9 +52,53 @@
 {% block extra_scripts %}
 <script>
     const endpoints = {
+        view: "{{ url_for('ideas.track_view', id=idea.id) }}",
         upvote: "{{ url_for('ideas.upvote', id=idea.id) }}",
         report: "{{ url_for('ideas.report', id=idea.id) }}"
     };
+
+    function getOrCreateViewerId() {
+        const key = 'idead_viewer_id';
+        try {
+            let viewerId = localStorage.getItem(key);
+            if (viewerId) {
+                return viewerId;
+            }
+
+            const randomPart = Math.random().toString(36).slice(2, 12);
+            viewerId = `v${Date.now().toString(36)}${randomPart}`;
+            localStorage.setItem(key, viewerId);
+            return viewerId;
+        } catch (error) {
+            const randomPart = Math.random().toString(36).slice(2, 12);
+            return `v${Date.now().toString(36)}${randomPart}`;
+        }
+    }
+
+    async function trackIdeaView() {
+        try {
+            const viewerId = getOrCreateViewerId();
+            const response = await fetch(endpoints.view, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Idead-Viewer': viewerId
+                },
+                body: JSON.stringify({ viewer_id: viewerId })
+            });
+
+            if (!response.ok) {
+                return;
+            }
+
+            const data = await response.json();
+            if (data.success) {
+                document.getElementById('view-count').innerText = data.views;
+            }
+        } catch (error) {
+            // Keep view tracking non-blocking for the page.
+        }
+    }
 
     async function sendAction(actionType) {
         const btn = document.getElementById(`btn-${actionType}`);
@@ -106,5 +156,7 @@
             }, 3000);
         }
     }
+
+    trackIdeaView();
 </script>
 {% endblock %}

@@ -1,5 +1,6 @@
 from flask import current_app
 from sqlalchemy.sql.expression import func
+from urllib.parse import urlparse
 
 from app.models import Idea
 
@@ -24,3 +25,15 @@ def is_captcha_valid(payload):
 
     # TODO: validate payload against an external CAPTCHA provider.
     return bool(payload)
+
+
+def is_likely_url(url):
+    """Light URL validation for optional external project references."""
+    if not url:
+        return True
+
+    parsed = urlparse(url)
+    if parsed.scheme not in ("http", "https"):
+        return False
+
+    return bool(parsed.netloc)

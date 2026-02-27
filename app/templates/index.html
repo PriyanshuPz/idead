@@ -4,10 +4,17 @@
 {% block content %}
 <div class="panel">
     <div class="panel-header">
-        <h2 class="panel-title">System Status Overview</h2>
-        <span class="panel-meta">SYS_METRICS_DB</span>
+        <h2 class="panel-title">Idead Command Overview</h2>
+        <div class="header-actions">
+            <span class="panel-meta">CORE_TERMINAL</span>
+            <a href="{{ url_for('ideas.bury') }}" class="btn btn-control">Bury Idea</a>
+        </div>
     </div>
-    <div class="grid-3">
+    <p class="text-muted">
+        Idead is an idea graveyard: archive unfinished concepts, inspect what was abandoned, and recover
+        promising experiments before they disappear.
+    </p>
+    <div class="grid-3 dashboard-stats">
         <div class="stat-block">
             <h4 class="text-muted">Total Ideas</h4>
             <h2 class="text-accent">{{ stats.total_ideas }}</h2>
@@ -37,7 +44,7 @@
             <a href="{{ url_for('ideas.view_idea', id=trending.id) }}" class="btn btn-sm">Inspect</a>
         </div>
         {% else %}
-        <p class="text-muted mono">No data available in this sector.</p>
+        <p class="text-muted mono">No trend data yet. Bury the first idea to initialize this sector.</p>
         {% endif %}
     </div>
 
@@ -54,8 +61,37 @@
             <a href="{{ url_for('ideas.view_idea', id=random.id) }}" class="btn btn-sm">Inspect</a>
         </div>
         {% else %}
-        <p class="text-muted mono">No data available in this sector.</p>
+        <p class="text-muted mono">Random suggestion unavailable until at least one idea is archived.</p>
         {% endif %}
     </div>
+</div>
+
+<div class="grid-2">
+    <section class="panel">
+        <div class="panel-header">
+            <h3 class="panel-title">Quick Actions</h3>
+            <span class="panel-meta">ACTION_STRIP</span>
+        </div>
+        <div class="quick-actions">
+            <a href="{{ url_for('ideas.bury') }}" class="btn btn-control">Bury Idea</a>
+            <a href="{{ url_for('main.yard') }}" class="btn">Open Graveyard</a>
+            <a href="{{ url_for('main.about') }}" class="btn">System Info</a>
+        </div>
+    </section>
+    <section class="panel">
+        <div class="panel-header">
+            <h3 class="panel-title">System Guidance</h3>
+            <span class="panel-meta">OPERATIONS</span>
+        </div>
+        {% if stats.total_ideas == 0 %}
+        <p class="text-muted mono">
+            STATUS: EMPTY_ARCHIVE // Start by burying an abandoned idea. Metadata and rankings populate automatically.
+        </p>
+        {% else %}
+        <p class="text-muted mono">
+            STATUS: LIVE // Use <code>/yard?sort=upvoted</code> for top-voted ideas and inspect entries before reporting.
+        </p>
+        {% endif %}
+    </section>
 </div>
 {% endblock %}

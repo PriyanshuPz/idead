@@ -1,10 +1,11 @@
 from flask import current_app, flash, jsonify, redirect, render_template, request, url_for
 
+from app.models import Idea, db
 from app.routes import ideas_bp
-from app.models import db, Idea
-from app.utils.helpers import is_captcha_valid
+from app.utils.helpers import is_captcha_valid, is_likely_url
 from app.utils.moderation import check_and_moderate
 from app.utils.rate_limit import rate_limit
+from app.utils.views import normalize_viewer_id, register_unique_view
 
 
 @ideas_bp.route("/bury", methods=["GET", "POST"])
@@ -17,6 +18,7 @@ def bury():
         title = (request.form.get("title") or "").strip()
         description = (request.form.get("description") or "").strip()
         reason = (request.form.get("reason") or "").strip()
+        project_url = (request.form.get("project_url") or "").strip()
         difficulty = request.form.get("difficulty", type=int)
         captcha_value = (request.form.get("captcha") or "").strip()
 
@@ -32,10 +34,15 @@ def bury():
             flash("Difficulty must be between 1 and 5.", "error")
             return redirect(url_for("ideas.bury"))
 
+        if not is_likely_url(project_url):
+            flash("Project URL must start with http:// or https://", "error")
+            return redirect(url_for("ideas.bury"))
+
         new_idea = Idea(
             title=title,
             description=description,
             reason=reason,
+            project_url=project_url or None,
             difficulty=difficulty,
         )
 
@@ -57,11 +64,33 @@ def view_idea(id):
     if check_and_moderate(idea):
         return render_template("idea_not_found.html"), 404
 
-    # Increment view count
-    idea.views += 1
-    db.session.commit()
-
     return render_template("idea.html", idea=idea)
+
+
+@ideas_bp.route("/idea/<int:id>/view", methods=["POST"])
+@rate_limit(
+    limit=lambda: current_app.config.get("VIEW_RATE_LIMIT", 30),
+    per=lambda: current_app.config.get("VIEW_RATE_PERIOD", 60),
+)
+def track_view(id):
+    idea = Idea.query.get_or_404(id)
+    if check_and_moderate(idea):
+        return jsonify({"success": False, "message": "Idea no longer exists."}), 404
+
+    payload = request.get_json(silent=True) or {}
+    raw_viewer_id = request.headers.get("X-Idead-Viewer", "") or payload.get(
+        "viewer_id", ""
+    )
+    viewer_id = normalize_viewer_id(raw_viewer_id)
+    if not viewer_id:
+        return jsonify({"success": False, "message": "Invalid viewer token."}), 400
+
+    is_new_view = register_unique_view(id, viewer_id)
+    if is_new_view:
+        idea.views += 1
+
+    db.session.commit()
+    return jsonify({"success": True, "views": idea.views, "counted": is_new_view})
 
 
 @ideas_bp.route("/idea/<int:id>/upvote", methods=["POST"])

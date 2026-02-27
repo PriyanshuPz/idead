@@ -18,3 +18,6 @@
 - [x] Ensure responsive layout for smaller screens
 - [x] Add empty state views for no ideas and filtered results
 - [x] Write configuration module for rate limits and moderation thresholds
+- [x] setup deployment config
+- [x] added option to set any resource URL in the idea for other people to see
+- [x] Added an identifier to check unique views

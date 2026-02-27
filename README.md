@@ -17,6 +17,8 @@ With Idead, users can:
 * browse the idea graveyard feed
 * bury a new idea along with context and reasoning
 * open any idea to read its full details
+* attach an optional project URL for repository/prototype/docs context
+* avoid inflated view counts through browser-level deduplicated view tracking
 * upvote ideas and report them for moderation
 * view dashboard metrics (total ideas, views, burials)
 
