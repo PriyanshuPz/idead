@@ -23,4 +23,6 @@
 - [x] Added an identifier to check unique views
 - [x] updated diff UI and the presentation
 - [x] added error pages like 404
+- [x] Adding types I am frustrated with red lines
+- [x] Adding terms page and more details on about page
 

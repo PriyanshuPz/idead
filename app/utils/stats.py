@@ -2,7 +2,6 @@ from app.models import db, Idea, GlobalStat
 
 
 def get_stats():
-    """Returns total ideas, total views, and total burials (deleted ideas)."""
     total_ideas = Idea.query.count()
     total_views = db.session.query(db.func.sum(Idea.views)).scalar() or 0
 

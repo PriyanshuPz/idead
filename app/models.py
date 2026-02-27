@@ -1,7 +1,15 @@
 from datetime import datetime
 
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import CheckConstraint, DateTime, ForeignKey, Integer, String, Text, UniqueConstraint
+from sqlalchemy import (
+    CheckConstraint,
+    DateTime,
+    ForeignKey,
+    Integer,
+    String,
+    Text,
+    UniqueConstraint,
+)
 from sqlalchemy.orm import Mapped, mapped_column
 
 
@@ -34,6 +42,8 @@ class IdeaView(db.Model):
     __table_args__ = (UniqueConstraint("idea_id", "viewer_id", name="uq_idea_view"),)
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    idea_id: Mapped[int] = mapped_column(ForeignKey("ideas.id"), nullable=False, index=True)
+    idea_id: Mapped[int] = mapped_column(
+        ForeignKey("ideas.id"), nullable=False, index=True
+    )
     viewer_id: Mapped[str] = mapped_column(String(64), nullable=False, index=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)

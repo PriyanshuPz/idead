@@ -40,3 +40,8 @@ def yard():
 @main_bp.route("/about")
 def about():
     return render_template("about.html")
+
+
+@main_bp.route("/terms")
+def terms():
+    return render_template("terms.html")

@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %}Terms | Idead{% endblock %}
+
+{% block content %}
+<div class="panel">
+    <div class="panel-header">
+        <h2 class="panel-title">Fair Use Guidelines</h2>
+        <span class="panel-meta">TERMS.SUMMARY</span>
+    </div>
+    <p>
+        These terms are a practical usage guide for Idead. They are intended to keep the graveyard readable, safe, and
+        useful for everyone browsing abandoned ideas.
+    </p>
+</div>
+
+<div class="grid-2">
+    <section class="panel">
+        <div class="panel-header">
+            <h3 class="panel-title">Acceptable Use</h3>
+            <span class="panel-meta">GUIDELINE.A</span>
+        </div>
+        <p class="text-muted">
+            Do not post harmful, abusive, illegal, or malicious content. Keep submissions focused on project concepts
+            and reflective context.
+        </p>
+    </section>
+
+    <section class="panel">
+        <div class="panel-header">
+            <h3 class="panel-title">Intellectual Property</h3>
+            <span class="panel-meta">GUIDELINE.B</span>
+        </div>
+        <p class="text-muted">
+            If you attach project links, make sure you have the right to share them and respect third-party ownership
+            and licensing terms.
+        </p>
+    </section>
+</div>
+
+<div class="panel">
+    <div class="panel-header">
+        <h3 class="panel-title">Public Visibility & Moderation</h3>
+        <span class="panel-meta">GUIDELINE.C</span>
+    </div>
+    <p>
+        Ideas in the graveyard are visible to other visitors. Reporting exists to help maintain platform integrity.
+        Ideas that cross moderation thresholds may be automatically removed.
+    </p>
+    <p class="text-muted">
+        This moderation flow is intentionally simple and designed for lightweight self-regulation of shared content.
+    </p>
+</div>
+
+<div class="panel">
+    <div class="panel-header">
+        <h3 class="panel-title">Privacy Note</h3>
+        <span class="panel-meta">GUIDELINE.D</span>
+    </div>
+    <p class="text-muted">
+        Idead operates without user accounts. It uses minimal anonymous interaction data for feature functionality,
+        including rate limiting and view-count accuracy controls.
+    </p>
+    <div class="panel-actions">
+        <a href="{{ url_for('main.about') }}" class="btn btn-sm">Back to About</a>
+    </div>
+</div>
+{% endblock %}

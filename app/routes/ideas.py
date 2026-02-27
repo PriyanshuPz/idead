@@ -1,3 +1,5 @@
+from typing import Any
+
 from flask import (
     current_app,
     flash,
@@ -7,6 +9,7 @@ from flask import (
     request,
     url_for,
 )
+from flask.typing import ResponseReturnValue
 
 from app.models import Idea, db
 from app.routes import ideas_bp
@@ -21,7 +24,7 @@ from app.utils.views import normalize_viewer_id, register_unique_view
     limit=lambda: current_app.config.get("BURY_RATE_LIMIT", 3),
     per=lambda: current_app.config.get("BURY_RATE_PERIOD", 60),
 )
-def bury():
+def bury() -> ResponseReturnValue:
     if request.method == "POST":
         title = (request.form.get("title") or "").strip()
         description = (request.form.get("description") or "").strip()
@@ -66,7 +69,7 @@ def bury():
 
 
 @ideas_bp.route("/idea/<int:id>")
-def view_idea(id):
+def view_idea(id: int) -> ResponseReturnValue:
     idea = Idea.query.get_or_404(id)
 
     if check_and_moderate(idea):
@@ -80,12 +83,12 @@ def view_idea(id):
     limit=lambda: current_app.config.get("VIEW_RATE_LIMIT", 30),
     per=lambda: current_app.config.get("VIEW_RATE_PERIOD", 60),
 )
-def track_view(id):
+def track_view(id: int) -> ResponseReturnValue:
     idea = Idea.query.get_or_404(id)
     if check_and_moderate(idea):
         return jsonify({"success": False, "message": "Idea no longer exists."}), 404
 
-    payload = request.get_json(silent=True) or {}
+    payload: dict[str, Any] = request.get_json(silent=True) or {}
     raw_viewer_id = request.headers.get("X-Idead-Viewer", "") or payload.get(
         "viewer_id", ""
     )
@@ -106,7 +109,7 @@ def track_view(id):
     limit=lambda: current_app.config.get("ACTION_RATE_LIMIT", 5),
     per=lambda: current_app.config.get("ACTION_RATE_PERIOD", 60),
 )
-def upvote(id):
+def upvote(id: int) -> ResponseReturnValue:
     idea = Idea.query.get_or_404(id)
     if check_and_moderate(idea):
         return jsonify({"success": False, "message": "Idea no longer exists."}), 404
@@ -122,7 +125,7 @@ def upvote(id):
     limit=lambda: current_app.config.get("ACTION_RATE_LIMIT", 5),
     per=lambda: current_app.config.get("ACTION_RATE_PERIOD", 60),
 )
-def report(id):
+def report(id: int) -> ResponseReturnValue:
     idea = Idea.query.get_or_404(id)
     idea.reports += 1
     db.session.commit()

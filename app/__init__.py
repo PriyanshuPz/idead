@@ -1,7 +1,9 @@
 from datetime import datetime, timezone
 import os
+from typing import Any
 
 from flask import Flask, render_template
+from flask.typing import ResponseReturnValue
 from werkzeug.exceptions import HTTPException
 from app.models import db
 from app.utils.helpers import get_difficulty_meta, get_difficulty_options
@@ -9,7 +11,7 @@ from app.utils.schema import ensure_schema_compatibility
 from config import Config
 
 
-def create_app(config_class=Config):
+def create_app(config_class: type[Config] = Config) -> Flask:
     app = Flask(__name__, static_folder="static", template_folder="templates")
     app.config.from_object(config_class)
 
@@ -22,7 +24,7 @@ def create_app(config_class=Config):
     db.init_app(app)
 
     @app.context_processor
-    def inject_build_metadata():
+    def inject_build_metadata() -> dict[str, Any]:
         return {
             "last_built": app.config.get("BUILD_TIMESTAMP"),
             "difficulty_options": get_difficulty_options(),
@@ -30,15 +32,15 @@ def create_app(config_class=Config):
         }
 
     @app.errorhandler(404)
-    def not_found_error(error):
+    def not_found_error(error: HTTPException) -> ResponseReturnValue:
         return render_template("404.html"), 404
 
     @app.errorhandler(429)
-    def rate_limited_error(error):
+    def rate_limited_error(error: HTTPException) -> ResponseReturnValue:
         return render_template("429.html"), 429
 
     @app.errorhandler(Exception)
-    def generic_error(error):
+    def generic_error(error: Exception) -> ResponseReturnValue:
         if isinstance(error, HTTPException):
             return error
         return render_template("error.html"), 500

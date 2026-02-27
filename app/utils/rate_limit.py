@@ -1,19 +1,23 @@
 import time
 from functools import wraps
+from typing import Callable, ParamSpec, TypeVar
+
 from flask import request, abort
 
-_rate_limits = {}
+P = ParamSpec("P")
+R = TypeVar("R")
+
+_rate_limits: dict[str, list[float]] = {}
 
 
-def rate_limit(limit=5, per=60):
-    """
-    Rate limiting decorator.
-    Allows `limit` requests per `per` seconds.
-    """
+def rate_limit(
+    limit: int | Callable[[], int] = 5,
+    per: int | Callable[[], int] = 60,
+) -> Callable[[Callable[P, R]], Callable[P, R]]:
 
-    def decorator(f):
+    def decorator(f: Callable[P, R]) -> Callable[P, R]:
         @wraps(f)
-        def wrapped(*args, **kwargs):
+        def wrapped(*args: P.args, **kwargs: P.kwargs) -> R:
             resolved_limit = limit() if callable(limit) else limit
             resolved_per = per() if callable(per) else per
 

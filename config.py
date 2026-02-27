@@ -8,7 +8,6 @@ BASE_DIR = Path(__file__).resolve().parent
 def _database_uri():
     database_url = os.environ.get("DATABASE_URL")
     if database_url:
-        # Render and some platforms expose postgres:// URLs.
         if database_url.startswith("postgres://"):
             return database_url.replace("postgres://", "postgresql://", 1)
         return database_url

@@ -5,11 +5,61 @@
 <div class="panel">
     <div class="panel-header">
         <h2 class="panel-title">About Idead</h2>
-        <span class="panel-meta">PROJECT.DOC</span>
+        <span class="panel-meta">PROJECT.CONTEXT</span>
     </div>
     <p>
-        Idead is a minimal idea graveyard for abandoned concepts. It records what an idea was,
-        why it was dropped, and how difficult it looked at the time.
+        Idead is an idea graveyard: a place for unfinished concepts to remain visible instead of getting lost in
+        private notes. It treats abandoned work as part of the creative process rather than a record of failure.
+    </p>
+    <p class="text-muted">
+        The platform is designed for reflective capture, lightweight browsing, and practical recovery of ideas that
+        may still be useful in a different season.
+    </p>
+</div>
+
+<div class="grid-2">
+    <section class="panel">
+        <div class="panel-header">
+            <h3 class="panel-title">Origin</h3>
+            <span class="panel-meta">WHY_THIS_EXISTS</span>
+        </div>
+        <p>
+            Many project concepts never reach completion, even when the thinking behind them has value. Over time,
+            these partial ideas are usually forgotten or buried in scattered files.
+        </p>
+        <p class="text-muted">
+            Idead was built to preserve that unfinished thinking in a single place where it can be revisited with more
+            context and less friction.
+        </p>
+    </section>
+
+    <section class="panel">
+        <div class="panel-header">
+            <h3 class="panel-title">Idea Graveyard</h3>
+            <span class="panel-meta">CORE_MODEL</span>
+        </div>
+        <p>
+            The graveyard metaphor reframes abandonment as archival. Each entry records what the idea was, why it was
+            paused, and how difficult it felt when it was active.
+        </p>
+        <p class="text-muted">
+            This creates visibility into abandoned paths and makes it easier to spot patterns across discarded work.
+        </p>
+    </section>
+</div>
+
+<div class="panel">
+    <div class="panel-header">
+        <h3 class="panel-title">How It Works</h3>
+        <span class="panel-meta">USER_FLOW</span>
+    </div>
+    <p>
+        Users bury ideas by submitting a title, description, reason for abandonment, and a perceived difficulty class.
+        Buried ideas appear in the yard, where they can be inspected, upvoted, and reported.
+    </p>
+    <p class="text-muted">
+        The dashboard surfaces a trending idea and a random suggestion to help users revisit dormant concepts and
+        recover viable directions.
     </p>
 </div>
 
@@ -20,18 +70,32 @@
             <span class="panel-meta">MAINTAINER</span>
         </div>
         <p class="text-muted">
-            Built for reflective capture, lightweight moderation, and practical archival browsing.
+            Idead is created and maintained by Priyanshu Verma, with a focus on preserving unfinished ideas as
+            readable artifacts and building calm, practical interfaces for reflection.
+        </p>
+        <p class="text-muted mono meta-small">
+            GITHUB:
+            <a class="external-ref" href="https://github.com/PriyanshuPz" target="_blank"
+                rel="noopener noreferrer">github.com/priyanshupz</a>
+            <br>
+            WEBSITE:
+            <a class="external-ref" href="https://priyanshupz.github.io" target="_blank"
+                rel="noopener noreferrer">priyanshupz.github.io</a>
         </p>
     </section>
 
     <section class="panel">
         <div class="panel-header">
-            <h3 class="panel-title">Open Source Notice</h3>
-            <span class="panel-meta">LICENSE</span>
+            <h3 class="panel-title">Open Source Note</h3>
+            <span class="panel-meta">ACCESS</span>
         </div>
         <p class="text-muted">
-            This project is intended to be transparent and modifiable. Fork, adapt, and improve as needed.
+            The codebase is open for exploration and learning. You can inspect implementation details, adapt patterns,
+            and understand how the product works.
         </p>
+        <div class="panel-actions">
+            <a href="{{ url_for('main.terms') }}" class="btn btn-sm">Read Terms</a>
+        </div>
     </section>
 </div>
 {% endblock %}
