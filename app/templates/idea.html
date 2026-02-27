@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+{% block title %}Idea {{ idea.id }} | Idead{% endblock %}
+
+{% block content %}
+<div class="panel">
+    <div class="panel-header">
+        <div class="row-space">
+            <h2 class="panel-title title-main">{{ idea.title }}</h2>
+            <span class="panel-meta">ID: [{{ '%04d' % idea.id }}]</span>
+        </div>
+    </div>
+
+    <div class="meta-row">
+        <p class="text-muted mono meta-small">
+            LOGGED: {{ idea.created_at.strftime('%Y-%m-%d %H:%M:%S') }} //
+            DIFFICULTY: {{ idea.difficulty }}/5
+        </p>
+    </div>
+
+    <div class="section-block">
+        <h4 class="text-muted">Description</h4>
+        <p class="pre-wrap">{{ idea.description }}</p>
+    </div>
+
+    <div class="section-block">
+        <h4 class="text-muted">Reason for Abandonment</h4>
+        <p class="pre-wrap">{{ idea.reason }}</p>
+    </div>
+
+    <div class="action-bar">
+        <div class="mono text-muted meta-actions">
+            VIEWS: [{{ idea.views }}] // UPVOTES: [<span id="upvote-count">{{ idea.upvotes }}</span>] // REPORTS: [<span id="report-count">{{ idea.reports }}</span>]
+        </div>
+
+        <div class="action-buttons">
+            <button onclick="sendAction('upvote')" class="btn btn-primary" id="btn-upvote">Upvote</button>
+            <button onclick="sendAction('report')" class="btn btn-muted" id="btn-report">Report for Deletion</button>
+        </div>
+    </div>
+</div>
+
+<div id="action-alert" class="alert hidden alert-offset"></div>
+
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    const endpoints = {
+        upvote: "{{ url_for('ideas.upvote', id=idea.id) }}",
+        report: "{{ url_for('ideas.report', id=idea.id) }}"
+    };
+
+    async function sendAction(actionType) {
+        const btn = document.getElementById(`btn-${actionType}`);
+        btn.disabled = true;
+
+        try {
+            const response = await fetch(endpoints[actionType], {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (response.status === 429) {
+                showAlert('Rate limit exceeded. Try again later.', 'error');
+                btn.disabled = false;
+                return;
+            }
+
+            const data = await response.json();
+
+            if (data.success) {
+                if (actionType === 'upvote') {
+                    document.getElementById('upvote-count').innerText = data.upvotes;
+                    showAlert('Upvote registered.', 'success');
+                } else if (actionType === 'report') {
+                    if (data.deleted) {
+                        showAlert('Threshold reached. Idea has been permanently expunged. Redirecting...', 'error');
+                        setTimeout(() => {
+                            window.location.href = "{{ url_for('main.yard') }}";
+                        }, 2000);
+                    } else {
+                        const reportCount = document.getElementById('report-count');
+                        reportCount.innerText = Number(reportCount.innerText) + 1;
+                        showAlert('Report logged.', 'success');
+                    }
+                }
+            }
+        } catch (error) {
+            showAlert('An error occurred communicating with the server.', 'error');
+        }
+
+        btn.disabled = false;
+    }
+
+    function showAlert(message, type) {
+        const alertBox = document.getElementById('action-alert');
+        alertBox.textContent = message;
+        alertBox.className = `alert ${type === 'error' ? 'error' : ''}`;
+        alertBox.classList.remove('hidden');
+
+        if (type !== 'error') {
+            setTimeout(() => {
+                alertBox.classList.add('hidden');
+            }, 3000);
+        }
+    }
+</script>
+{% endblock %}

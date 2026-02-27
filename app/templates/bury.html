@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Bury | Idead{% endblock %}
+
+{% block content %}
+<div class="panel panel-narrow">
+    <div class="panel-header">
+        <h2 class="panel-title">Bury an Idea</h2>
+        <span class="panel-meta">INPUT_STREAM</span>
+    </div>
+
+    <p class="text-muted form-intro">
+        Record an abandoned idea here. It will remain in the system until reported sufficiently to be permanently
+        expunged.
+    </p>
+
+    <form method="POST" action="{{ url_for('ideas.bury') }}">
+        <div class="form-group">
+            <label for="title">Title (Designation)</label>
+            <input type="text" id="title" name="title" required maxlength="100">
+        </div>
+
+        <div class="form-group">
+            <label for="description">Description (Core Concept)</label>
+            <textarea id="description" name="description" required></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="reason">Reason for Abandonment (Failure Mode)</label>
+            <textarea id="reason" name="reason" required></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="difficulty">Perceived Difficulty (1-5)</label>
+            <input type="number" id="difficulty" name="difficulty" min="1" max="5" required value="3">
+        </div>
+
+        {% if captcha_enabled %}
+        <div class="form-group">
+            <label for="captcha">Captcha Verification</label>
+            <input type="text" id="captcha" name="captcha" placeholder="Captcha token">
+            <p class="text-muted mono field-note">External CAPTCHA provider integration placeholder.</p>
+        </div>
+        {% endif %}
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Transmit to Graveyard</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

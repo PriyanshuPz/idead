@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Idea Removed | Idead{% endblock %}
+
+{% block content %}
+<div class="panel panel-narrow">
+    <div class="panel-header">
+        <h2 class="panel-title">Record Unavailable</h2>
+        <span class="panel-meta">ERR.404</span>
+    </div>
+    <p class="text-muted">
+        This idea has been removed after crossing the report threshold.
+    </p>
+    <div class="panel-actions">
+        <a class="btn" href="{{ url_for('main.yard') }}">Back to Graveyard</a>
+    </div>
+</div>
+{% endblock %}

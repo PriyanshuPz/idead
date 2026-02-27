@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Idead - a minimal idea graveyard for abandoned concepts.">
+    <link rel="icon" href="{{ url_for('static', filename='logo.png') }}" type="image/png">
+    <title>{% block title %}Idead{% endblock %}</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Source+Sans+3:wght@400;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    {% block extra_head %}{% endblock %}
+</head>
+
+<body>
+    <header class="site-header">
+        <div class="container nav-container">
+            <a href="{{ url_for('main.index') }}" class="brand">IDEAD</a>
+            <nav class="nav-links">
+                <a href="{{ url_for('main.index') }}" {% if request.endpoint == 'main.index' %}aria-current="page"{% endif %}>Terminal</a>
+                <a href="{{ url_for('main.yard') }}" {% if request.endpoint == 'main.yard' %}aria-current="page"{% endif %}>Graveyard</a>
+                <a href="{{ url_for('ideas.bury') }}" {% if request.endpoint == 'ideas.bury' %}aria-current="page"{% endif %}>Bury Idea</a>
+                <a href="{{ url_for('main.about') }}" {% if request.endpoint == 'main.about' %}aria-current="page"{% endif %}>About</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="site-main">
+        <div class="container">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            <div class="alerts">
+                {% for category, message in messages %}
+                <div class="alert {{ category }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            {% endwith %}
+
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p class="footer-text">SYS.VER: 1.0.0 // PROTOCOL: ABANDONMENT // <a href="{{ url_for('main.about') }}">SYS_INFO</a></p>
+        </div>
+    </footer>
+
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>

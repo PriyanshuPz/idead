@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Yard | Idead{% endblock %}
+
+{% block content %}
+<div class="panel-header yard-header">
+    <h2 class="panel-title">The Graveyard</h2>
+    <div class="mono sort-links">
+        <span class="text-muted">SORT_BY:</span>
+        <a href="?sort=newest"
+            class="{% if current_sort == 'newest' %}text-accent{% else %}text-muted{% endif %}">[NEWEST]</a>
+        <a href="?sort=viewed"
+            class="{% if current_sort == 'viewed' %}text-accent{% else %}text-muted{% endif %}">[VIEWED]</a>
+        <a href="?sort=upvoted"
+            class="{% if current_sort == 'upvoted' %}text-accent{% else %}text-muted{% endif %}">[UPVOTED]</a>
+        <a href="?sort=lowest_difficulty"
+            class="{% if current_sort == 'lowest_difficulty' %}text-accent{% else %}text-muted{% endif %}">[EASIEST]</a>
+    </div>
+</div>
+
+<div class="grid-2">
+    {% for idea in ideas %}
+    <a href="{{ url_for('ideas.view_idea', id=idea.id) }}" class="panel card-link">
+        <div class="row-space card-head">
+            <h3 class="title-main card-title">{{ idea.title }}</h3>
+            <span class="mono text-muted card-id">ID: [{{ '%04d' % idea.id }}]</span>
+        </div>
+
+        <p class="text-muted card-desc">
+            {{ idea.description[:120] }}{% if idea.description|length > 120 %}...{% endif %}
+        </p>
+
+        <div class="mono text-muted card-meta">
+            <span>DIFF: {{ idea.difficulty }}/5</span>
+            <span>V:{{ idea.views }} U:{{ idea.upvotes }}</span>
+        </div>
+    </a>
+    {% else %}
+    <div class="panel empty-panel">
+        <p class="text-muted mono">No entries found in the database.</p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
